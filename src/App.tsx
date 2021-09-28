@@ -8,6 +8,7 @@ const App: React.FC = () => {
   return (
     <div>
       <GlobalComponent />
+      <Home />{/* Setup for scaling later */}
       <PacksDescription />
     </div>
   );
