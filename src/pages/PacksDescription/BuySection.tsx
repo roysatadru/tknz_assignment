@@ -4,6 +4,7 @@ import { Grid } from '@mui/material';
 import ImageGallery from '../../containers/ImageGallery';
 import { ImageModel } from '../../models/ImageModel';
 import PackDescriptionCard from '../../containers/PackDescriptionCard';
+import SectionStructure from './SectionStructure';
 
 interface BuySectionProps {
   heading: string;
@@ -18,11 +19,11 @@ const BuySection: React.FC<BuySectionProps> = ({ images, ...props }) => {
   const [notHovered, setNotHovered] = useState<0 | true>(true);
 
   return (
-    <Grid container spacing={4} alignItems="stretch">
-      <Grid item xs={6}>
+    <SectionStructure>
+      <Grid item xs={12} md={6}>
         <ImageGallery images={images} position={notHovered} />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item xs={12} md={6}>
         <PackDescriptionCard
           {...props}
           onHoverButton={e => {
@@ -31,7 +32,7 @@ const BuySection: React.FC<BuySectionProps> = ({ images, ...props }) => {
           }}
         />
       </Grid>
-    </Grid>
+    </SectionStructure>
   );
 };
 

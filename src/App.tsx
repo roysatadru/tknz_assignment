@@ -6,11 +6,12 @@ import Home from './pages/Home'; // Created an empty home to better structure th
 
 const App: React.FC = () => {
   return (
-    <div>
+    <>
       <GlobalComponent />
-      <Home />{/* Setup for scaling later and for conditionally routing to Home */}
+      <Home />
+      {/* Setup for scaling later and for conditionally routing to Home */}
       <PacksDescription />
-    </div>
+    </>
   );
 };
 
