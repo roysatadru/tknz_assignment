@@ -2,8 +2,7 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 import { styled } from '@mui/material/styles';
 import { Global, css } from '@emotion/react';
-import { useTheme } from '@mui/system';
-import { Grid } from '@mui/material';
+import { Grid, useTheme } from '@mui/material';
 
 interface LayoutProps {
   title?: string;
@@ -25,6 +24,8 @@ const Layout: React.FC<LayoutProps> = ({
   title = 'TKNZ Assignment',
   ...props
 }) => {
+  const { typography } = useTheme();
+
   return (
     <div
       style={{
@@ -37,7 +38,7 @@ const Layout: React.FC<LayoutProps> = ({
         <title>{title}</title>
       </Helmet>
       <WrapperComponent>
-        <Grid item xs={8} container>
+        <Grid item container style={{ maxWidth: typography.pxToRem(880) }}>
           {/* Base Container to set the layout and breakpoints */}
           {children}
         </Grid>
@@ -55,7 +56,22 @@ export const GlobalComponent: React.FC = () => {
     <Global
       styles={css`
         html {
-          ${theme.breakpoints.up('xl')}: {},
+          @media only screen and (min-width: 1350px) {
+            font-size: 110%;
+          }
+
+          ${theme.breakpoints.up('xl')} {
+            font-size: 130%;
+          }
+
+          @media only screen and (min-width: 1600px) {
+            font-size: 150%;
+          }
+        }
+
+        ::selection {
+          background-color: ${theme.palette.secondary.main};
+          color: #000;
         }
       `}
     />
