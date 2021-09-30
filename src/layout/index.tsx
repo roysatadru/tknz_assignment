@@ -15,8 +15,7 @@ const WrapperComponent: React.FC<{ children: React.ReactNode }> = styled(
   ),
 )(({ theme }) => ({
   minHeight: '100vh',
-
-  [theme.breakpoints.up('xl')]: {},
+  padding: theme.spacing(theme.typography.pxToRem(70), 0),
 }));
 
 const Layout: React.FC<LayoutProps> = ({
@@ -24,8 +23,6 @@ const Layout: React.FC<LayoutProps> = ({
   title = 'TKNZ Assignment',
   ...props
 }) => {
-  const { typography } = useTheme();
-
   return (
     <div
       style={{
@@ -38,7 +35,7 @@ const Layout: React.FC<LayoutProps> = ({
         <title>{title}</title>
       </Helmet>
       <WrapperComponent>
-        <Grid item container style={{ maxWidth: typography.pxToRem(880) }}>
+        <Grid item container alignItems="center" justifyContent="center">
           {/* Base Container to set the layout and breakpoints */}
           {children}
         </Grid>
@@ -56,7 +53,17 @@ export const GlobalComponent: React.FC = () => {
     <Global
       styles={css`
         html {
-          @media only screen and (min-width: 1350px) {
+          font-size: 100%;
+
+          ${theme.breakpoints.up('md')} {
+            font-size: 90%;
+          }
+
+          @media only screen and (min-width: 1000px) {
+            font-size: 100%;
+          }
+
+          @media only screen and (min-width: 1450px) {
             font-size: 110%;
           }
 
@@ -66,6 +73,10 @@ export const GlobalComponent: React.FC = () => {
 
           @media only screen and (min-width: 1600px) {
             font-size: 150%;
+          }
+
+          @media only screen and (min-width: 1800px) {
+            font-size: 160%;
           }
         }
 

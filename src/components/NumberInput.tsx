@@ -11,7 +11,7 @@ const NumberInput = styled(
 )(
   ({ theme }) => `
   width: 100%;
-  padding: ${theme.spacing(0, 0.8)};
+  padding: ${theme.spacing(0, theme.typography.pxToRem(6.4))};
 
   &:hover .MuiOutlinedInput-notchedOutline {
     border-color: #fff;

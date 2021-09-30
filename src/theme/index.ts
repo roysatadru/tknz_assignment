@@ -21,10 +21,15 @@ export const themeOptions: ThemeOptions = {
     fontFamily: ['"Lato"', 'sans-serif'].join(','),
     h1: {
       fontFamily: '"Arimo", sans-serif',
-      fontSize: '1.85rem',
+      fontSize: '1.60rem',
       textTransform: 'uppercase',
-      fontWeight: 400,
+      fontWeight: 700,
       color: '#fba428',
+      
+      '@media only screen and (min-width: 430px)': {
+        fontSize: '1.85rem',
+        fontWeight: 400,
+      },
     },
     h2: {
       fontFamily: '"Arimo", sans-serif',
@@ -62,6 +67,8 @@ export const themeOptions: ThemeOptions = {
           padding: '0 2rem',
           boxShadow: '0 0 0.625rem 0 rgba(0, 0, 0, 0.05)',
           transition: 'all 300ms ease-in',
+          lineHeight: '2.5rem',
+          verticalAlign: 'middle',
         },
         containedPrimary: {
           '&:hover': {

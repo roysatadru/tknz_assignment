@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useMediaQuery, Theme } from '@mui/material';
 import { AnimateSharedLayout, motion } from 'framer-motion';
 
 import { ImageModel } from '../../models/ImageModel';
@@ -26,22 +27,41 @@ interface ImageGalleryProps {
 }
 
 const ImageGallery: React.FC<ImageGalleryProps> = ({ images, position }) => {
+  const matchesUpSm = useMediaQuery(
+    theme => (theme as Theme).breakpoints.up('sm'),
+    {
+      defaultMatches: document.body.getBoundingClientRect().width >= 600,
+    },
+  );
+
   const [curIndex, setCurIndex] = useState<number>(0);
 
   const updatedImages = useMemo(() => {
     const modifiedImagesList: ImageModelWithZIndex[] = [];
-    const indexWatched = position && curIndex;
+    if (matchesUpSm) {
+      const indexWatched = position && curIndex;
 
-    for (let i = indexWatched; i >= 0; i--) {
-      modifiedImagesList.push({ ...images[i], zIndex: i });
-    }
+      for (let i = indexWatched; i >= 0; i--) {
+        modifiedImagesList.push({ ...images[i], zIndex: i });
+      }
 
-    for (let i = indexWatched + 1; i < images.length; i++) {
-      modifiedImagesList.push({ ...images[i], zIndex: i });
+      for (let i = indexWatched + 1; i < images.length; i++) {
+        modifiedImagesList.push({ ...images[i], zIndex: i });
+      }
+    } else {
+      let currentIndex = curIndex;
+
+      for (let i = 0; i < images.length; i++) {
+        let index = currentIndex % images.length;
+
+        modifiedImagesList[i] = { ...images[index], zIndex: i };
+
+        currentIndex++;
+      }
     }
 
     return modifiedImagesList as ImageModelWithZIndexTuple;
-  }, [position, curIndex, images]);
+  }, [matchesUpSm, position, curIndex, images]);
 
   const onClickNextImage: React.MouseEventHandler<HTMLDivElement> = event => {
     event.stopPropagation();
@@ -51,85 +71,84 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, position }) => {
   return (
     <AnimateSharedLayout>
       <Structure layout>
-        {updatedImages.map((item, index) => {
-          const clickableCondition =
-            index ===
-            (curIndex === images.length - 1
-              ? images.length - 1
-              : (curIndex + 1) % 5);
+        {matchesUpSm
+          ? updatedImages.map((item, index) => {
+              const clickableCondition =
+                index ===
+                (curIndex === images.length - 1
+                  ? images.length - 1
+                  : (curIndex + 1) % 5);
 
-          return (
-            <ImageWrapper
-              layout
-              key={item.url}
-              style={{
-                zIndex: item.zIndex,
-                ...(index === 0
-                  ? {
-                      gridColumn: '1 / -1',
-                    }
-                  : clickableCondition
-                  ? {
-                      cursor: 'pointer',
-                    }
-                  : {}),
-              }}
-              onClick={clickableCondition ? onClickNextImage : undefined}
-            >
-              <motion.img
-                variants={variants}
-                initial="hidden"
-                animate="visible"
-                src={item.url}
-                alt={item.altText}
-                layout
-              />
-            </ImageWrapper>
-          );
-        })}
-        {/* <ImageWrapper
-          ref={firstImageRef}
-          style={{
-            gridColumn: '1 / -1',
-          }}
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-        >
-          <img src={firstImage.url} alt={firstImage.altText} />
-        </ImageWrapper>
-        <ImageWrapper
-          ref={secondImageRef}
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-        >
-          <img src={secondImage.url} alt={secondImage.altText} />
-        </ImageWrapper>
-        <ImageWrapper
-          ref={thirdImageRef}
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-        >
-          <img src={thirdImage.url} alt={thirdImage.altText} />
-        </ImageWrapper>
-        <ImageWrapper
-          ref={fourthImageRef}
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-        >
-          <img src={fourthImage.url} alt={fourthImage.altText} />
-        </ImageWrapper>
-        <ImageWrapper
-          ref={fifthImageRef}
-          variants={variants}
-          initial="hidden"
-          animate="visible"
-        >
-          <img src={fifthImage.url} alt={fifthImage.altText} />
-        </ImageWrapper> */}
+              return (
+                <ImageWrapper
+                  layout
+                  key={item.url}
+                  style={{
+                    zIndex: item.zIndex,
+                    ...(index === 0
+                      ? {
+                          gridColumn: '1 / -1',
+                        }
+                      : clickableCondition
+                      ? {
+                          cursor: 'pointer',
+                        }
+                      : {}),
+                  }}
+                  onClick={clickableCondition ? onClickNextImage : undefined}
+                >
+                  <motion.img
+                    variants={variants}
+                    initial="hidden"
+                    animate="visible"
+                    src={item.url}
+                    alt={item.altText}
+                    layout
+                  />
+                </ImageWrapper>
+              );
+            })
+          : updatedImages.map((item, index) => {
+              const gridIndex = 3 + ((index - 1) % updatedImages.length);
+              const scaleFactor =
+                1 - ((index - 1) % (updatedImages.length - 1)) * 0.05;
+
+              return (
+                <ImageWrapper
+                  layout
+                  key={item.url}
+                  style={{
+                    zIndex: updatedImages.length - index,
+                    ...(index === 0
+                      ? {
+                          gridColumn: '1 / -1',
+                        }
+                      : index === 1
+                      ? {
+                          cursor: 'pointer',
+                          gridColumn: `${gridIndex} / ${gridIndex + 6}`,
+                          gridRow: '2 / 3',
+                          scale: scaleFactor,
+                        }
+                      : {
+                          gridColumn: `${gridIndex} / ${gridIndex + 6}`,
+                          gridRow: '2 / 3',
+                          scale: scaleFactor,
+                        }),
+                  }}
+                  onClick={index === 1 ? onClickNextImage : undefined}
+                >
+                  <motion.img
+                    variants={variants}
+                    initial="hidden"
+                    animate="visible"
+                    src={item.url}
+                    alt={item.altText}
+                    layout
+                  />
+                </ImageWrapper>
+              );
+            })}
       </Structure>
     </AnimateSharedLayout>
   );
