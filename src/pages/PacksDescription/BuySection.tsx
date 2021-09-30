@@ -1,16 +1,35 @@
-import React from 'react';
-import { Grid, Paper } from '@mui/material';
+import React, { useState } from 'react';
+import { Grid } from '@mui/material';
 
-import ImageGallery from '../../components/ImageGallery';
+import ImageGallery from '../../containers/ImageGallery';
+import { ImageModel } from '../../models/ImageModel';
+import PackDescriptionCard from '../../containers/PackDescriptionCard';
 
-const BuySection: React.FC = () => {
+interface BuySectionProps {
+  heading: string;
+  subHeading: string;
+  price: number;
+  totalBought: string;
+  packDetails: Array<string> | string;
+  images: [ImageModel, ImageModel, ImageModel, ImageModel, ImageModel];
+}
+
+const BuySection: React.FC<BuySectionProps> = ({ images, ...props }) => {
+  const [notHovered, setNotHovered] = useState<0 | true>(true);
+
   return (
-    <Grid item xs={12} container>
+    <Grid container spacing={4} alignItems="stretch">
       <Grid item xs={6}>
-        <ImageGallery />
+        <ImageGallery images={images} position={notHovered} />
       </Grid>
       <Grid item xs={6}>
-        <Paper></Paper>
+        <PackDescriptionCard
+          {...props}
+          onHoverButton={e => {
+            e.stopPropagation();
+            setNotHovered(curState => (curState ? 0 : true));
+          }}
+        />
       </Grid>
     </Grid>
   );

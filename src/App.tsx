@@ -8,7 +8,7 @@ const App: React.FC = () => {
   return (
     <div>
       <GlobalComponent />
-      <Home />{/* Setup for scaling later */}
+      <Home />{/* Setup for scaling later and for conditionally routing to Home */}
       <PacksDescription />
     </div>
   );
