@@ -49,7 +49,7 @@ const ImageGallery: React.FC<ImageGalleryProps> = ({ images, position }) => {
         modifiedImagesList.push({ ...images[i], zIndex: i });
       }
     } else {
-      let currentIndex = curIndex;
+      let currentIndex = position && curIndex;
 
       for (let i = 0; i < images.length; i++) {
         let index = currentIndex % images.length;
